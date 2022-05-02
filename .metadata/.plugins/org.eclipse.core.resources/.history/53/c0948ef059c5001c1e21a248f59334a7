@@ -1,0 +1,110 @@
+package com.entity;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Recipe")
+public class Recipe {
+
+@Id
+@GeneratedValue
+private int RecipieId;
+
+@Column
+private String name;
+
+@Column
+private LocalDateTime created;
+
+@Column
+private boolean vegan;
+
+@Column
+private int servings;
+
+@OneToMany(targetEntity = Ingredients.class, cascade=CascadeType.ALL)
+@JoinColumn(name="RI_fk",referencedColumnName = "recipeId")
+private List<Ingredients> ingredientsList;
+
+@Column
+private String instructions;
+
+public Recipe() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+
+public Recipe(int recipieId, String name, LocalDateTime created, boolean vegan, int servings, List<Ingredients> ingredientsList,
+		String instructions) {
+	super();
+	RecipieId = recipieId;
+	this.name = name;
+	this.created = created;
+	this.vegan = vegan;
+	this.servings = servings;
+	this.ingredientsList = ingredientsList;
+	this.instructions = instructions;
+}
+
+public int getRecipieId() {
+	return RecipieId;
+}
+
+public void setRecipieId(int recipieId) {
+	RecipieId = recipieId;
+}
+
+public String getName() {
+	return name;
+}
+
+public void setName(String name) {
+	this.name = name;
+}
+
+public boolean isVegan() {
+	return vegan;
+}
+
+public void setVegan(boolean vegan) {
+	this.vegan = vegan;
+}
+
+public int getServings() {
+	return servings;
+}
+
+public void setServings(int servings) {
+	this.servings = servings;
+}
+
+public List<Ingredients> getIngredients() {
+	return ingredientsList;
+}
+
+public void setIngredients(List<Ingredients> ingredientsList) {
+	this.ingredientsList = ingredientsList;
+}
+
+public String getInstructions() {
+	return instructions;
+}
+
+public void setInstructions(String instructions) {
+	this.instructions = instructions;
+}
+
+
+
+	
+	
+}

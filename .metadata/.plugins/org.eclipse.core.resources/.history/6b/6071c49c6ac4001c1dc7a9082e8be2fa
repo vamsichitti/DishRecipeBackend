@@ -1,0 +1,40 @@
+package com.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.entity.Recipe;
+import com.repository.RecipeRepository;
+
+public class RecipeService {
+	
+	
+	@Autowired
+	private RecipeRepository repo;
+	
+	
+	public void add(Recipe recipe) {
+		repo.save(recipe); 
+	}
+	
+	public Recipe getRecipieById(int id) {
+		return repo.findById(id).get();
+		
+	} 
+	
+	public List<Recipe> getAllRecipes(){
+		 List<Recipe> recipelist= repo.findAll();
+		 return recipelist;
+		 
+	}
+	
+	public void delete(int recipeid) {
+		repo.deleteById(recipeid);
+	}
+	
+	public void update(Recipe recipe) {
+		repo.save(recipe);
+	}
+
+}

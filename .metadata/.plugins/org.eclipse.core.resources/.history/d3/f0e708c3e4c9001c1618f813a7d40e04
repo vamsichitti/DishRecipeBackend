@@ -1,0 +1,16 @@
+# Below are the details of database
+# make sure you change them if you are using database other than Postgresql
+server.port = 9090
+spring.datasource.driver-class-name = org.postgresql.Driver
+spring.datasource.url = jdbc:postgresql://localhost:3000/postgres
+
+spring.datasource.username= postgres
+spring.datasource.password =root
+
+#create is default for the below property
+spring.jpa.hibernate.ddl-auto=create
+
+jwt.secret = secret
+
+
+

@@ -1,0 +1,5 @@
+package com.recipes.controller;
+
+public class RecipeBackendController {
+
+}

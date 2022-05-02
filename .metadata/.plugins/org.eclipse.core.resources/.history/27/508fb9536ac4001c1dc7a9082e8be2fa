@@ -1,0 +1,27 @@
+package com.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.entity.Recipe;
+import com.repository.RecipeRepository;
+import com.services.RecipieService;
+
+@RestController
+public class RecipeController {
+	
+	@Autowired
+	RecipieRepository repo;
+	
+	@Autowired
+	RecipieService service;
+	
+	@PostMapping("/saverecipie")
+	public ResponseEntity<?> createRecipie(@RequestBody Recipie recipie) {
+		if(recipie.getRecipieId()recipie==null)
+	}
+
+}

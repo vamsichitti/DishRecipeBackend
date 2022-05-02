@@ -1,0 +1,50 @@
+package com.main;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+import com.entity.Ingredients;
+import com.entity.Recipe;
+import com.repository.RecipeRepository;
+
+@SpringBootApplication
+@ComponentScan(basePackages = "")
+public class DishRecipeApplication {
+	
+	static RecipeRepository repo ;
+
+	public static void main(String[] args) {
+		SpringApplication.run(DishRecipeApplication.class, args);
+		
+		
+		Ingredients ingre1 = new Ingredients();
+		ingre1.setId(12);
+		ingre1.setIngredientsList("chilli powder,turmric powder");
+		
+		Ingredients ingre2 = new Ingredients();
+		ingre2.setId(12);
+		ingre2.setIngredientsList("tamarind,capcicum");
+		
+		List<Ingredients> listOfIngredients = new ArrayList<Ingredients>();;
+		listOfIngredients.add(ingre1);
+		listOfIngredients.add(ingre2);
+		
+		Recipe resp = new Recipe();
+		resp.setName("maggi masala");
+		resp.setRecipieId(100);
+		resp.setVegan(true);
+		resp.setInstructions("cook for 5 min");
+		resp.setServings(5);
+		resp.setIngredients(listOfIngredients);
+		
+		
+		repo.save(resp);
+		
+	}
+
+}
