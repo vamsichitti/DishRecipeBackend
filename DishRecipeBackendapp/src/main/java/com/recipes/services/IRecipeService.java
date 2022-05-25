@@ -8,7 +8,7 @@ import com.recipes.exception.RecipeNotFoundException;
 
 public interface IRecipeService {
 
-	public List<Recipe> recipesList();
+	public List<Recipe> getRecipesList();
 
 	public void addRecipe(Recipe recipe);
 

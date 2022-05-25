@@ -5,8 +5,6 @@ package com.recipes.entity;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,8 +19,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
@@ -31,6 +27,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "Recipe")
 public class Recipe {
+
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,7 +39,7 @@ public class Recipe {
 
 	
     @Column
-    @JsonFormat
+    @JsonFormat(pattern = "dd-MM-yyy")
 	private LocalDate created;
 
 	@Column
@@ -57,25 +55,26 @@ public class Recipe {
 	@JoinColumn(name="RI_fk",referencedColumnName = "recipeId")
 	private List<Ingredients> ingredientsList;
 	
-
+	
+	
+	
+	
 	public Recipe() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-
-
-	public Recipe( String name, LocalDate created, boolean veg, int servings, String instructions,
+	public Recipe(int recipeId, String name, boolean veg, int servings, String instructions,
 			List<Ingredients> ingredientsList) {
 		super();
-		
+		this.recipeId = recipeId;
 		this.name = name;
-		this.created = created;
+		//this.created = created;
 		this.veg = veg;
 		this.servings = servings;
 		this.instructions = instructions;
 		this.ingredientsList = ingredientsList;
 	}
-
 
 	public int getRecipeId() {
 		return recipeId;
@@ -101,11 +100,9 @@ public class Recipe {
 		this.created = created;
 	}
 
-
 	public boolean isVeg() {
 		return veg;
 	}
-
 
 	public void setVeg(boolean veg) {
 		this.veg = veg;
@@ -127,22 +124,20 @@ public class Recipe {
 		this.instructions = instructions;
 	}
 
-
-
 	public List<Ingredients> getIngredientsList() {
 		return ingredientsList;
 	}
 
-
-
 	public void setIngredientsList(List<Ingredients> ingredientsList) {
 		this.ingredientsList = ingredientsList;
 	}
+	
+
+	
 
 
 
 	
 
-
- 
+	
 }

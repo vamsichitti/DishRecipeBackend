@@ -2,7 +2,9 @@ package com.recipes.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +13,16 @@ import com.recipes.exception.RecipeNotFoundException;
 import com.recipes.repository.IRecipeRepository;
 
 
+
 @Service
 public class RecipeServices implements IRecipeService{
+	
+	
 	@Autowired
 	IRecipeRepository recipeRepo;
 
 	@Override
-	public List<Recipe> recipesList() {
+	public List<Recipe> getRecipesList() {
 		List<Recipe> listOfRecipes = recipeRepo.findAll();
 		return listOfRecipes;
 	}
@@ -42,7 +47,10 @@ public class RecipeServices implements IRecipeService{
 
 	@Override
 	public Optional<Recipe> getRecipeById (int recipeId) {
-		Optional<Recipe> recipe = recipeRepo.findById(recipeId);
+		
+		
+		Optional<Recipe> recipe= recipeRepo.findById(recipeId);
+		
 		return recipe;
 	}
 

@@ -1,0 +1,5 @@
+package com.recipes.jwt.util;
+
+public class JwtUtil {
+
+}

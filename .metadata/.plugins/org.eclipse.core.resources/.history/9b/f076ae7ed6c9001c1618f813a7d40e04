@@ -1,5 +1,0 @@
-package com.recipes.repository;
-
-public class IRecipeRepository {
-
-}

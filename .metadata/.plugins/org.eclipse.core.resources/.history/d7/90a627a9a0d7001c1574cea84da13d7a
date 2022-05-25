@@ -1,0 +1,5 @@
+package com.recipes.jwt.entity;
+
+public class AuthRequest {
+
+}

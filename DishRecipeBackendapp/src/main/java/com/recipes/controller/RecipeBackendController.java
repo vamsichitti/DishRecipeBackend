@@ -2,6 +2,8 @@ package com.recipes.controller;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +21,11 @@ import com.recipes.exception.RecipeNotFoundException;
 import com.recipes.repository.IRecipeRepository;
 import com.recipes.services.RecipeServices;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/recipes")
+@SecurityRequirement(name = "recipesapi")
 public class RecipeBackendController {
 	
 	@Autowired
@@ -29,6 +34,8 @@ public class RecipeBackendController {
 	@Autowired
 	IRecipeRepository recipeRepo;
 	
+	Logger logger = LoggerFactory.getLogger(RecipeBackendController.class); 
+	
 	
 	@PostMapping("/addRecipe")
 	public ResponseEntity<?> createRecipe(@RequestBody Recipe recipe) throws RecipeNotFoundException{
@@ -36,62 +43,91 @@ public class RecipeBackendController {
 		Optional<?> opt2 = recipeRepo.findByName(recipe.getName());
 		
 		if(opt1.isPresent() || opt2.isPresent()) {
+			logger.info("Recipe with ID {} is already EXISTS",recipe.getRecipeId());
 			throw new RecipeNotFoundException(" Id "+recipe.getRecipeId()+" already exists");
 			
 		}
 		else {
 			recipeService.addRecipe(recipe);
+			logger.info("Recipe with ID {} is created SUCCESSFULLY",recipe.getRecipeId());
 			return new ResponseEntity<>("Successfully created",HttpStatus.CREATED);
+			
 		}
 	}
 	
-	@GetMapping("/getRecipe/{id}")
-	public ResponseEntity<Optional<Recipe>> getRecipeById(@PathVariable("id") int id) throws RecipeNotFoundException{
-		if(recipeRepo.existsById(id)) {
-			Optional<Recipe> resp=recipeService.getRecipeById(id);
+	@PutMapping("/updateRecipe/{recipeId}")
+	public ResponseEntity<?> updateRecipe(@RequestBody Recipe recipe , @PathVariable("recipeId") int recipeId) throws RecipeNotFoundException {
+
+		//Recipe recipeRecords = recipeRepo.findById(recipe.getRecipeId()).get();
+		logger.info("Updating the recipe with ID {}",recipeId);
+		Optional<?> recipeData = recipeRepo.findById(recipeId);
+		if (!recipeData.isPresent()) {
+			logger.info("RecipeID with ID {} is Not found",recipeId);
+			throw new RecipeNotFoundException("Recipe Id " + recipeId + " is not found ");
 			
-			return new ResponseEntity<>(resp,HttpStatus.OK);
+		} else {
+            Recipe updatedRecipe = (Recipe) recipeData.get();
+			
+			updatedRecipe.setName(recipe.getName());
+			updatedRecipe.setRecipeId(recipe.getRecipeId());
+			updatedRecipe.setInstructions(recipe.getInstructions());
+			updatedRecipe.setServings(recipe.getServings());
+			updatedRecipe.setVeg(recipe.isVeg());
+			updatedRecipe.setIngredientsList(recipe.getIngredientsList());
+			updatedRecipe.setCreated(recipe.getCreated());
+
+			recipeService.updateRecipe(updatedRecipe);
+			
+			logger.info(" ID : {} is UPDATED SUCCESSFULLY",recipeId);
+
+			return new ResponseEntity<>(" Recipe Id " + recipeId + " is updated successfully ",
+					HttpStatus.ACCEPTED);
+		}
+		
+		
+
+	}
+	
+	@GetMapping("/getRecipeById/{id}")
+	public ResponseEntity<Optional<Recipe>> getRecipeById(@PathVariable("id") int id) throws RecipeNotFoundException{
+		Optional<Recipe> opt = recipeRepo.findById(id);
+		
+		logger.info("Calling a recipe By ID {}",id);
+		if(opt.isPresent()) {
+			Optional<Recipe> resp=recipeService.getRecipeById(id);
+			logger.info("Recipe with ID {} is found",id);
+			return new ResponseEntity<>(resp,HttpStatus.FOUND);
 		}
 		else {
-			throw new RecipeNotFoundException("ID "+id+" not found ");
+			logger.info("RecipeID with ID {} is Not found",id);
+			throw new RecipeNotFoundException("ID with "+id+" not found ");
 		}
 			
 	}
 	@GetMapping("/{recipeName}")
 	public ResponseEntity<?> getRecipeByName(@PathVariable("recipeName") String recipeName) throws RecipeNotFoundException {
-
+         
+		logger.info("Calling Recipe By Name {}",recipeName);
 		Optional<Recipe> opt = recipeRepo.findByName(recipeName);
 
 		if (opt.isPresent()) {
+			logger.info(" Recipe with Name {} is found",recipeName);
 
-			return new ResponseEntity<>( recipeService.getRecipeByName(recipeName), HttpStatus.OK);
+			return new ResponseEntity<>( recipeService.getRecipeByName(recipeName), HttpStatus.FOUND);
 
 		}
 
 		else {
+			logger.info(" Recipe with Name {} not found",recipeName);
 
 			throw new RecipeNotFoundException(" Recipe with name : " + recipeName + " is not found ");
 		}
 
 	}
 	
-	@PutMapping("/updateRecipe/{recipeId}")
-	public ResponseEntity<?> updateRecipe(@RequestBody Recipe recipe) throws RecipeNotFoundException {
 
-		if (recipeRepo.existsById(recipe.getRecipeId())) {
-
-			recipeService.updateRecipe(recipe);
-
-			return new ResponseEntity<>(" Recipe Id " + recipe.getRecipeId() + " is updated successfully ",
-					HttpStatus.ACCEPTED);
-
-		} else {
-			throw new RecipeNotFoundException("Recipe Id " + recipe.getRecipeId() + " is not found ");
-		}
-
-	}
 	
-	@DeleteMapping("/deleteMapping/{recipeId}")
+	@DeleteMapping("/deleteRecipe/{recipeId}")
 	public ResponseEntity<String> deleteRecipe(@PathVariable("recipeId") int recipeId) throws RecipeNotFoundException {
 
 		Optional<Recipe> opt = recipeRepo.findById(recipeId);
@@ -99,9 +135,12 @@ public class RecipeBackendController {
 		if (opt.isPresent()) {
 
 			recipeService.deleteRecipe(recipeId);
+			
+			logger.info("ID with {} is DELETED SUCCESSFULLY",recipeId);
 
 			return new ResponseEntity<>("Recipe id : " + recipeId + " is deleted successfully", HttpStatus.OK);
 		} else {
+			logger.info("ID with {} is not found",recipeId);
 
 			throw new RecipeNotFoundException(" Recipe id : " + recipeId + " is not found ");
 
@@ -113,7 +152,7 @@ public class RecipeBackendController {
 
 		if (!recipeRepo.findAll().isEmpty()) {
 
-			return new ResponseEntity<>(recipeService.recipesList(), HttpStatus.OK);
+			return new ResponseEntity<>(recipeService.getRecipesList(), HttpStatus.OK);
 
 		} else {
 

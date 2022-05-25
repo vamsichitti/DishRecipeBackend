@@ -1,0 +1,5 @@
+package com.recipes.jwt.repository;
+
+public interface JwtRepository {
+
+}
