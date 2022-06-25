@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.7'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "com.microsoft.azure.azurewebapp" version "1.1.0"
 }
 
 group = 'com.recipes'
@@ -10,6 +11,18 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+}
+azurewebapp {
+    subscription = '7114e0a9-09bf-4016-999c-fb5ed7287991'
+    resourceGroup = 'RecipeAppDemo'
+    appName = 'RecipeManagementApp'
+    pricingTier = 'Free Trial' 
+    region = 'Central US' 
+    runtime {
+        os = 'Windows' 
+        webContainer = 'Tomcat 9.0'
+        javaVersion = 'Java 11'
+    }
 }
 
 dependencies {

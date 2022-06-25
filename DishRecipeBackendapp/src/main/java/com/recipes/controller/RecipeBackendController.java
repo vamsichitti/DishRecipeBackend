@@ -104,7 +104,7 @@ public class RecipeBackendController {
 		}
 			
 	}
-	@GetMapping("/{recipeName}")
+	@GetMapping("getRecipeByName/{recipeName}")
 	public ResponseEntity<?> getRecipeByName(@PathVariable("recipeName") String recipeName) throws RecipeNotFoundException {
          
 		logger.info("Calling Recipe By Name {}",recipeName);
@@ -155,6 +155,7 @@ public class RecipeBackendController {
 			return new ResponseEntity<>(recipeService.getRecipesList(), HttpStatus.OK);
 
 		} else {
+			logger.info("Empty List of Recipes");
 
 			throw new RecipeNotFoundException("No recipes in the list ");
 

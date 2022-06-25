@@ -31,7 +31,7 @@ public class Recipe {
 	
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int recipeId;
 
 	@Column
@@ -52,7 +52,7 @@ public class Recipe {
 	private String instructions;
 	
 	@OneToMany(targetEntity = Ingredients.class, cascade=CascadeType.ALL)
-	@JoinColumn(name="RI_fk",referencedColumnName = "recipeId")
+	@JoinColumn(name="Recipe_fk",referencedColumnName = "recipeId")
 	private List<Ingredients> ingredientsList;
 	
 	

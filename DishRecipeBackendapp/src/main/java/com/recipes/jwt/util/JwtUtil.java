@@ -7,8 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.recipes.controller.RecipeBackendController;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtUtil {
-	
+	Logger logger = LoggerFactory.getLogger(JwtUtil.class); 
 	  private String secret = "xadmin";
 
 	    public String extractUsername(String token) {
@@ -51,10 +55,12 @@ public class JwtUtil {
 	    // here we are setting the time for 10 hours to expire the token. 
 	    // and you can see we are using HS256 algorithm
 	    private String createToken(Map<String, Object> claims, String subject) {
+	    	logger.info("JWT token generated successfuly");
 
 	        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 	                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
 	                .signWith(SignatureAlgorithm.HS256, secret).compact();
+	        
 	    }
 
 	    // here we are validation the token
@@ -62,6 +68,8 @@ public class JwtUtil {
 	    	 // basically token will be generated in encrypted string and from that string . we extract our username and password using extractUsername method
 	        final String username = extractUsername(token);
 	        // here we are validating the username and then check the token is expired or not
+	        if(isTokenExpired(token)==true)
+	        	logger.info("Input TOKEN got EXPIRED");
 	        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	    }
 	}

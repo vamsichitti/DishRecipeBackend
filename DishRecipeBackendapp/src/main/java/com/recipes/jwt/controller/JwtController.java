@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.recipes.controller.RecipeBackendController;
 import com.recipes.exception.UserAlreadyRegisteredException;
 import com.recipes.jwt.entity.AuthRequest;
 import com.recipes.jwt.entity.User;
@@ -20,6 +23,8 @@ import com.recipes.jwt.util.JwtUtil;
 
 @RestController
 public class JwtController {
+	Logger logger = LoggerFactory.getLogger(JwtController.class); 
+	
 	@Autowired
 	private JwtUtil jwtUtil;
 	
@@ -35,10 +40,13 @@ public class JwtController {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(authrequest.getUserName(), authrequest.getPassword()));
 		} catch (Exception e) {
+			logger.info("USERNAME and PASSWORD are InValid");
 			throw new Exception("Invalid username and password");
 		}
+		logger.info("USERNAME and PASSWORD are Valid");
 
 		return jwtUtil.generateToken(authrequest.getUserName());
+		
 	}
 	
 	@PostMapping("/signup")
@@ -50,6 +58,7 @@ public class JwtController {
 		}
 		else {
 			userRepo.save(user);
+			logger.info("a new user with name {} registered Successfully",user.getUserName());
 			return new ResponseEntity<>("You are Successfully Registered",HttpStatus.CREATED);
 		}
 	}

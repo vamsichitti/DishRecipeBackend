@@ -41,7 +41,7 @@ public class DishRecipeBackendappApplication {
 		   List<User> users = Stream.of(
 	                new User(101, "xadmin", "xadminpassword", "xadmin@gmail.com"),
 	                new User(102, "vamsi", "vamsipassword", "vamsi@gmail.com"),
-	                new User(103, "gurpreet", "gurpreetpassword", "gurpreet@gmail.com"),
+	                new User(103, "sabarish", "sabarishpassword", "sabarish@gmail.com"),
 	                new User(104, "mohit", "mohitpassword", "mohit@gmail.com")
 	        ).collect(Collectors.toList());
 	        repository.saveAll(users);

@@ -32,7 +32,7 @@ import com.recipes.entity.Recipe;
 import com.recipes.repository.IRecipeRepository;
 import com.recipes.services.RecipeServices;
 
-import ch.qos.logback.core.status.Status;
+
 
 @AutoConfigureMockMvc
 @ContextConfiguration
@@ -79,8 +79,7 @@ public class RestControllerTest {
 		recipe1.setInstructions("wait for 5 min ");
 		recipe1.setServings(3);
 		recipe1.setVeg(true);
-//		recipe1.setCreated( LocalDate.parse(
-//               "2018-12-06"));
+
 		recipe1.setIngredientsList(ingredientsList);
 		
 		Recipe recipe2 = new Recipe();
@@ -89,14 +88,13 @@ public class RestControllerTest {
 		recipe1.setInstructions("wait for 10 min ");
 		recipe1.setServings(3);
 		recipe1.setVeg(true);
-//		recipe1.setCreated( LocalDate.parse(
-//               "2018-12-06"));
+
 		recipe1.setIngredientsList(ingredientsList);
 		
 		recipeList.add(recipe1);
 		recipeList.add(recipe2);
 		
-		//when(service.getRecipesList()).thenReturn(recipeList);
+		
 		when(recipeRepo.findAll()).thenReturn(recipeList);
 		
 		this.mockMvc.perform(get("/recipes/allRecipes"))
@@ -132,7 +130,7 @@ public class RestControllerTest {
 		when(recipeRepo.findByName(recipe1.getName())).thenReturn(Optional.of(recipe1));
 		
 		String recipeName = recipe1.getName();
-		this.mockMvc.perform(get("/recipes/{recipeName}",recipeName))
+		this.mockMvc.perform(get("/recipes/getRecipeByName/{recipeName}",recipeName))
 		                    .andExpect(status().isFound())
 		                    .andExpect(MockMvcResultMatchers.jsonPath(".name").value("maggi masala"))
 		                    .andDo(print());
