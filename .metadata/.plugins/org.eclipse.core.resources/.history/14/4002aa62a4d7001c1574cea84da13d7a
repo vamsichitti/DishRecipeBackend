@@ -1,5 +1,0 @@
-package com.recipes.jwt.config;
-
-public class SecurityConfig {
-
-}

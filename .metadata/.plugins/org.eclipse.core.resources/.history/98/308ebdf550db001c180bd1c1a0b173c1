@@ -1,5 +1,0 @@
-package com.recipes.exception;
-
-public class UserAlreadyRegisteredException {
-
-}

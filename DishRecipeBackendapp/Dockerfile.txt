@@ -1,0 +1,4 @@
+FROM openjdk:11
+LABEL maintainer="Vamsi"
+ADD build/libs/DishRecipeBackendapp-0.0.1-SNAPSHOT.jar Dish-Recipe.jar
+ENTRYPOINT ["java", "-jar", "Dish-Recipe.jar"]

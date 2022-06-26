@@ -1,5 +1,0 @@
-package com.recipes.jwt.filter;
-
-public class JwtFilter {
-
-}

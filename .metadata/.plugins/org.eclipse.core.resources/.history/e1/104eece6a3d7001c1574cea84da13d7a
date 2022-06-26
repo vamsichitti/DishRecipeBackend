@@ -1,5 +1,0 @@
-package com.recipes.jwt.controller;
-
-public class JwtController {
-
-}
