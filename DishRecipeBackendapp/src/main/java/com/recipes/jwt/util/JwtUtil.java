@@ -2,6 +2,7 @@ package com.recipes.jwt.util;
 
 
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,8 @@ import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -46,15 +49,25 @@ public class JwtUtil {
 
 	    // this method is for generating token. as argument is username. so as user first time send request with username and password
 	    // so here we will fetch the username , so based on that username we are going to create one token
-	    public String generateToken(String username) {
-	        Map<String, Object> claims = new HashMap<>();
-	        return createToken(claims, username);
-	    }
+	   
+	 // generate token for user
+		public String generateToken(UserDetails userDetails) {
+			Map<String, Object> claims = new HashMap<>();
+			Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
+			if (roles.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+				claims.put("isAdmin", true);
+			}
+			if (roles.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+				claims.put("isUser", true);
+			}
+			return doGenerateToken(claims, userDetails.getUsername());
+		}
 
+	
 	    // in this method createToken subject argument is username
 	    // here we are setting the time for 10 hours to expire the token. 
 	    // and you can see we are using HS256 algorithm
-	    private String createToken(Map<String, Object> claims, String subject) {
+	    private String doGenerateToken(Map<String, Object> claims, String subject) {
 	    	logger.info("JWT token generated successfuly");
 
 	        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))

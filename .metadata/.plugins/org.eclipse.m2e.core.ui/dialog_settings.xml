@@ -6,6 +6,7 @@
 	</section>
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\vamsi\Downloads\spring-boot-security-jwt-mysql"/>
 			<item value="C:\Users\vamsi\Downloads\boot-swagger-security"/>
 		</list>
 		<list key="projectNameTemplate">

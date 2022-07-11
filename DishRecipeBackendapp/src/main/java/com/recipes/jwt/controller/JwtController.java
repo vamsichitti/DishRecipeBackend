@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -19,6 +20,7 @@ import com.recipes.exception.UserAlreadyRegisteredException;
 import com.recipes.jwt.entity.AuthRequest;
 import com.recipes.jwt.entity.User;
 import com.recipes.jwt.repository.UserRepository;
+import com.recipes.jwt.service.CustomUserDetailService;
 import com.recipes.jwt.util.JwtUtil;
 
 @RestController
@@ -30,6 +32,9 @@ public class JwtController {
 	
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private CustomUserDetailService userDetailsService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -44,8 +49,10 @@ public class JwtController {
 			throw new Exception("Invalid username and password");
 		}
 		logger.info("USERNAME and PASSWORD are Valid");
+		
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(authrequest.getUserName());
 
-		return jwtUtil.generateToken(authrequest.getUserName());
+		return jwtUtil.generateToken(userDetails);
 		
 	}
 	
