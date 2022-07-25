@@ -51,6 +51,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http.csrf().disable()
 		.authorizeRequests().antMatchers("/recipes/deleteRecipe/{recipeId}").hasRole("ADMIN")
 		.antMatchers("/recipes").hasAnyRole("USER","ADMIN")
+		.antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-ui/URL").permitAll()
 		.antMatchers("/authenticate", "/register").permitAll().anyRequest().authenticated()
 		.and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
 		and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).

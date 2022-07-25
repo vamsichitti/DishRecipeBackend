@@ -15,8 +15,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.recipes.exception.UnAuthorizedException;
 import com.recipes.jwt.util.JwtUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,7 +31,7 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws ServletException, IOException {
+			throws ServletException, IOException,Forbidden {
 
 		 try{
 			// JWT Token is in the form "Bearer token". Remove Bearer word and
@@ -56,6 +58,10 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 		 catch(BadCredentialsException ex)
 		 {
 			 request.setAttribute("exception", ex);
+		 }
+		 catch(Forbidden ex) {
+			 request.setAttribute("exception", ex);
+		
 		 }
 		chain.doFilter(request, response);
 	}
